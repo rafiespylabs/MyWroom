@@ -1,0 +1,176 @@
+* {
+  --bg-color: #1f1f1f;
+  --white: #fff;
+  --blue: #008cf0;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--white);
+}
+
+/*
+=============
+PRELOAD START
+=============
+*/
+#preloader #loop {
+  height: 100px;
+  width: 100px;
+  border: rgb(15, 159, 73) solid 4px;
+  border-radius: 200px;
+}
+#preloader #loop::before {
+  background: linear-gradient(to left, rgba(15, 159, 73, 0) 0%, rgb(15, 159, 73) 30%, rgb(15, 159, 73) 70%, rgba(15, 159, 73, 0) 100%);
+  content: "";
+  display: block;
+  height: 4px;
+  left: -100px;
+  position: relative;
+  top: 95px;
+  width: 300px;
+}
+#preloader .centerBike {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: 26px;
+  margin-left: -12px;
+}
+#preloader .center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -50px;
+  margin-left: -50px;
+}
+#preloader #bike-wrapper {
+  height: 108px;
+  width: 108px;
+  animation: drive 3s linear infinite;
+}
+#preloader #bike {
+  height: 24px;
+  width: 25px;
+  background-image: url("./images/bike.png");
+}
+
+@keyframes drive {
+  0% {
+    margin-left: -364px;
+    opacity: 0;
+  }
+  33.33% {
+    transform: rotate(0deg);
+    margin-left: -50px;
+    opacity: 1;
+  }
+  66.66% {
+    transform: rotate(-360deg);
+    margin-left: -50px;
+    opacity: 1;
+  }
+  100% {
+    margin-left: 264px;
+    transform: rotate(-360deg);
+    opacity: 0;
+  }
+}
+/*
+===========
+PRELOAD END
+===========
+*/
+/*
+=================
+MAIN BANNER START
+=================
+*/
+.main-banner {
+  position: relative;
+  height: 100dvh;
+  width: 100dvw;
+}
+.main-banner__bg-img {
+  position: absolute;
+  inset: 0;
+}
+.main-banner__bg-img img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.main-banner__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100dvh;
+  text-align: center;
+}
+.main-banner__content .sub-text {
+  font-weight: 300;
+}
+.main-banner__content #typed {
+  font-weight: bold;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--blue);
+}
+.main-banner__content .cursor {
+  display: inline-block;
+  background-color: #b0ff95;
+  animation: blinker 800ms infinite;
+}
+.main-banner__content .cursor.typing-true {
+  animation: none;
+}
+
+@keyframes blinker {
+  0% {
+    background-color: #0396ff;
+  }
+  50% {
+    background-color: transparent;
+  }
+  100% {
+    background-color: #0396ff;
+  }
+}
+/*
+===============
+MAIN BANNER END
+===============
+*/
+/*
+================
+RESPONSIVE START
+================
+*/
+/* Portrait tablets and small desktops */
+@media (min-width: 768px) and (max-width: 991px) {
+  .main-banner__content .logo {
+    max-width: 180px;
+  }
+  .main-banner__content .logo img {
+    width: 100%;
+    height: 100%;
+  }
+}
+/* Landscape phones and portrait tablets */
+@media (max-width: 767px) {
+  .main-banner__content .logo {
+    max-width: 120px;
+  }
+  .main-banner__content .logo img {
+    width: 100%;
+    height: 100%;
+  }
+}
+/*
+==============
+RESPONSIVE END
+==============
+*//*# sourceMappingURL=style.css.map */
