@@ -21,6 +21,7 @@ $role_id=auth()->user()->role_id;
         </div>
     </div>
     <div class="sidebar-wrapper scrollbar scrollbar-inner">
+        @hideOnSpecificPage('getChapter')
         <div class="sidebar-content">
             <ul class="nav nav-secondary">
                 <li class="nav-item">
@@ -53,6 +54,38 @@ $role_id=auth()->user()->role_id;
                         <p>MemberShips</p>
                     </a>
                 </li>
+                <li class="nav-item {{request()->is('worktimes')? 'active':''}}">
+                    <a href="{{route('worktimes')}}">
+                        <i class="menu-icon fa fa-calendar"></i>
+                        <p>Work Times</p>
+                    </a>
+                </li>
+                <li class="nav-item {{request()->is('tasks')? 'active':''}}">
+                    <a href="{{route('tasks')}}">
+                        <i class="menu-icon fa fa-tasks"></i>
+                        <p>Tasks</p>
+                    </a>
+                </li>
+                <li class="nav-item {{request()->is('dailyworks')? 'active':''}}">
+                    <a href="{{route('dailyworks')}}">
+                        <i class="menu-icon fa fa-tasks"></i>
+                        <p>Daily Works</p>
+                    </a>
+                </li>
+                @if(auth()->user()->role_id==3)
+                <li class="nav-item {{request()->is('mytasks')? 'active':''}}">
+                    <a href="{{route('mytasks')}}">
+                        <i class="menu-icon fa fa-tasks"></i>
+                        <p>My Tasks</p>
+                    </a>
+                </li>
+                <li class="nav-item {{request()->is('getChapter')? 'active':''}}">
+                    <a href="{{route('getChapter')}}">
+                        <i class="menu-icon fa fa-tasks"></i>
+                        <p>Go To Chapter</p>
+                    </a>
+                </li>
+                @endif
                 <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#base">
                         <i class="fas fa fa-cogs"></i>
@@ -64,7 +97,8 @@ $role_id=auth()->user()->role_id;
                     ||request()->is('countries')||request()->is('states')
                     ||request()->is('districts')|| request()->is('cities') 
                     ||request()->is('businesscategories')||request()->is('membershiptypes')
-                    ||request()->is('chapters') || request()->is('enquirytypes')? 'show' : '' }}" id="base">
+                    ||request()->is('chapters') || request()->is('enquirytypes')
+                    ||request()->is('statuses')? 'show' : '' }}" id="base">
                         <ul class="nav nav-collapse">
                             <li class="{{request()->is('branches')? 'active':''}}">
                                 <a href="{{route('branches')}}">
@@ -126,10 +160,16 @@ $role_id=auth()->user()->role_id;
                                     <span class="sub-item">Membership Types</span>
                                 </a>
                             </li>
+                            <li class="{{request()->is('statuses')? 'active':''}}">
+                                <a href="{{route('statuses')}}">
+                                    <span class="sub-item">Statuses</span>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </li>
             </ul>
         </div>
+        @endHideOnSpecificPage
     </div>
 </div>

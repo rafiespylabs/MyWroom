@@ -24,18 +24,18 @@ class AttendanceController extends Controller
         foreach($attendances as $attend)
         {
             $added_by=$attend->added_user->name??'';
-            $punch_in_time=date("h:i A", strtotime($attend->punch_in_time));
-            $punch_out_time=date("h:i A", strtotime($attend->punch_out_time));
+            $punch_in_time=date("h:i A", strtotime($attend->punch_in));
+            $punch_out_time=date("h:i A", strtotime($attend->punch_out	));
             $date = $attend->date ? Carbon::parse($attend->date)->format('d/m/Y') : '';
             $html.='<tr>';
             $html.='<td>'.$i.'</td>';
             $html.='<td>'.$attend->staff->name.'</td>';
             $html.='<td>'.$punch_in_time.'</td>';
-            $html.='<td><a href="https://www.google.com/maps/search/?api=1&amp;query='.$attend->longitude_punchin.','.$attend->lattitude_punchin.'" target="_blank">Map</a></td>';
-            $html.='<td><img src="uploads/'.$attend->punchinimage.'" style="width:200px;"></td>';
+            $html.='<td><a href="https://www.google.com/maps/search/?api=1&amp;query='.$attend->punchin_lat.','.$attend->punchin_long.'" target="_blank">Map</a></td>';
+            $html.='<td><img src="uploads/'.$attend->punchin_image.'" style="width:200px;"></td>';
             $html.='<td>'.$punch_out_time.'</td>';
-            $html.='<td><a href="https://www.google.com/maps/search/?api=1&amp;query='.$attend->punchout_long.','.$attend->punchout_lat.'" target="_blank">Map</a></td>';
-            $html.='<td><img src="uploads/'.$attend->punchoutimage.'" style="width:200px;"></td>';
+            $html.='<td><a href="https://www.google.com/maps/search/?api=1&amp;query='.$attend->punchout_lat.','.$attend->punchout_long.'" target="_blank">Map</a></td>';
+            $html.='<td><img src="uploads/'.$attend->punch_out_image.'" style="width:200px;"></td>';
             $html.='<td>'.$date.'</td>';
             $html.='<td>'.$added_by.'</td>';
             $html.='</tr>';
@@ -55,18 +55,18 @@ class AttendanceController extends Controller
         foreach($filterattendances as $attend)
         {
             $added_by=$attend->added_user->name??'';
-            $punch_in_time=date("h:i A", strtotime($attend->punch_in_time));
-            $punch_out_time=date("h:i A", strtotime($attend->punch_out_time));
+            $punch_in_time=date("h:i A", strtotime($attend->punch_in));
+            $punch_out_time=date("h:i A", strtotime($attend->punch_out	));
             $date = $attend->date ? Carbon::parse($attend->date)->format('d/m/Y') : '';
             $html.='<tr>';
             $html.='<td>'.$i.'</td>';
             $html.='<td>'.$attend->staff->name.'</td>';
             $html.='<td>'.$punch_in_time.'</td>';
-            $html.='<td><a href="https://www.google.com/maps/search/?api=1&amp;query='.$attend->longitude_punchin.','.$attend->lattitude_punchin.'" target="_blank">Map</a></td>';
-            $html.='<td><img src="uploads/'.$attend->punchinimage.'" style="width:200px;"></td>';
+            $html.='<td><a href="https://www.google.com/maps/search/?api=1&amp;query='.$attend->punchin_long.','.$attend->punchin_lat.'" target="_blank">Map</a></td>';
+            $html.='<td><img src="uploads/'.$attend->punchin_image.'" style="width:200px;"></td>';
             $html.='<td>'.$punch_out_time.'</td>';
             $html.='<td><a href="https://www.google.com/maps/search/?api=1&amp;query='.$attend->punchout_long.','.$attend->punchout_lat.'" target="_blank">Map</a></td>';
-            $html.='<td><img src="uploads/'.$attend->punchoutimage.'" style="width:200px;"></td>';
+            $html.='<td><img src="uploads/'.$attend->punch_out_image.'" style="width:200px;"></td>';
             $html.='<td>'.$date.'</td>';
             $html.='<td>'.$added_by.'</td>';
             $html.='</tr>';

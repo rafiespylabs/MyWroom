@@ -15,10 +15,18 @@ use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\MembershiptypeController;
 use App\Http\Controllers\BusinesscategoryController;
 use App\Http\Controllers\ChapterController;
+use App\Http\Controllers\ChapterSelectionController;
 use App\Http\Controllers\CityController;
+use App\Http\Controllers\TaskController;
+use App\Http\Controllers\TaskstatusController;
+use App\Http\Controllers\WorktimeController;
+use App\Http\Controllers\MytaskController;
+use App\Http\Controllers\MytasktransController;
+use App\Http\Controllers\DailyworkController;
 use Illuminate\Support\Facades\Route;
 Route::get('/', function () {return redirect(route('login'));});
 Route::get('/dashboard', [AdminController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/getChapter', [AdminController::class, 'getChapter'])->middleware(['auth', 'verified'])->name('getChapter');
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -95,6 +103,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/chapters/update', [ChapterController::class, 'update'])->name('chapters.update');
     Route::post('/chapters/destroy', [ChapterController::class, 'destroy'])->name('chapters.destroy'); 
     
+    Route::post('/chapters/selection', [ ChapterSelectionController::class, 'selection'])->name('chapters.selection'); 
+    Route::get('/chapter/dashboard', [ ChapterSelectionController::class, 'dashboard'])->name('chapter.dashboard'); 
+
     Route::get('/enquirytypes', [EnquirytypeController::class, 'index'])->name('enquirytypes');
     Route::post('/enquirytypes/store', [EnquirytypeController::class, 'store'])->name('enquirytypes.store');
     Route::post('/enquirytypes/edit', [EnquirytypeController::class, 'edit'])->name('enquirytypes.edit');
@@ -112,5 +123,43 @@ Route::middleware('auth')->group(function () {
     Route::post('/memberships/edit', [MembershipController::class, 'edit'])->name('memberships.edit');
     Route::post('/memberships/update', [MembershipController::class, 'update'])->name('memberships.update');
     Route::post('/memberships/destroy', [MembershipController::class, 'destroy'])->name('memberships.destroy'); 
+
+    Route::get('/worktimes', [WorktimeController::class, 'index'])->name('worktimes');
+    Route::post('/worktimes/store', [WorktimeController::class, 'store'])->name('worktimes.store');
+    Route::post('/worktimes/edit', [WorktimeController::class, 'edit'])->name('worktimes.edit');
+    Route::post('/worktimes/update', [WorktimeController::class, 'update'])->name('worktimes.update');
+    Route::post('/worktimes/destroy', [WorktimeController::class, 'destroy'])->name('worktimes.destroy');
+
+    Route::get('/tasks', [TaskController::class, 'index'])->name('tasks');
+    Route::post('/tasks/store', [TaskController::class, 'store'])->name('tasks.store');
+    Route::post('/tasks/edit', [TaskController::class, 'edit'])->name('tasks.edit');
+    Route::post('/tasks/update', [TaskController::class, 'update'])->name('tasks.update');
+    Route::post('/tasks/destroy', [TaskController::class, 'destroy'])->name('tasks.destroy'); 
+
+    Route::get('/statuses', [TaskstatusController::class, 'index'])->name('statuses');
+    Route::post('/statuses/store', [TaskstatusController::class, 'store'])->name('statuses.store');
+    Route::post('/statuses/edit', [TaskstatusController::class, 'edit'])->name('statuses.edit');
+    Route::post('/statuses/update', [TaskstatusController::class, 'update'])->name('statuses.update');
+    Route::post('/statuses/destroy', [TaskstatusController::class, 'destroy'])->name('statuses.destroy');
+    
+    Route::get('/mytasks', [MytaskController::class, 'index'])->name('mytasks');
+    Route::post('/mytasks/store', [MytaskController::class, 'store'])->name('mytasks.store');
+    Route::post('/mytasks/edit', [MytaskController::class, 'edit'])->name('mytasks.edit');
+    Route::post('/mytasks/update', [MytaskController::class, 'update'])->name('mytasks.update');
+    Route::post('/mytasks/destroy', [MytaskController::class, 'destroy'])->name('mytasks.destroy');
+    Route::post('/get-task-date', [MytaskController::class, 'getStatusDate'])->name('get.task.date');
+
+    Route::get('/mytasktrans/{mytask_id}', [MytasktransController::class, 'index'])->name('mytasktrans');
+    Route::post('/mytasktrans/store', [MytasktransController::class, 'store'])->name('mytasktrans.store');
+    Route::post('/mytasktrans/edit', [MytasktransController::class, 'edit'])->name('mytasktrans.edit');
+    Route::post('/mytasktrans/update', [MytasktransController::class, 'update'])->name('mytasktrans.update');
+    Route::post('/mytasktrans/destroy', [MytasktransController::class, 'destroy'])->name('mytasktrans.destroy');
+    Route::post('/get-task-details', [MytasktransController::class, 'getTaskDetails'])->name('get.task.details');
+
+    Route::get('/dailyworks', [DailyworkController::class, 'index'])->name('dailyworks');
+    Route::post('/dailyworks/store', [DailyworkController::class, 'store'])->name('dailyworks.store');
+    Route::post('/dailyworks/edit', [DailyworkController::class, 'edit'])->name('dailyworks.edit');
+    Route::post('/dailyworks/update', [DailyworkController::class, 'update'])->name('dailyworks.update');
+    Route::post('/dailyworks/destroy', [DailyworkController::class, 'destroy'])->name('dailyworks.destroy');
 });
 require __DIR__.'/auth.php';

@@ -10,7 +10,7 @@ class Tbl_attendances extends Model
     protected $updatedAtColumn = 'updatedAt';
     public function staff()
     {
-        return $this->belongsTo(User::class, 'staff_user_id','id');
+        return $this->belongsTo(User::class, 'login_id','id');
     }
     public function added_user()
     {

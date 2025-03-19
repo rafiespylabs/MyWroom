@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>My Wroom</title>
+    <title>My Wroom-Chapter</title>
     <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
     <link rel="icon" href="{{asset('admin1/assets/img/logo/mywrrom.png')}}" type="image/x-icon" />
     <script src="{{asset('admin1/assets/js/plugin/webfont/webfont.min.js')}}"></script>
@@ -28,13 +28,13 @@
   </head>
   <body>
     <div class="wrapper">
-        @include('layouts.admin1.nav')
+        @include('layouts.chapter.nav')
       <div class="main-panel">
-        @include('layouts.admin1.header')
+        @include('layouts.chapter.header')
         <div class="container">
           {{ $slot }}
         </div> 
-        @include('layouts.admin1.footer')
+        @include('layouts.chapter.footer')
       </div>
     </div>
     <div class="custom-template">

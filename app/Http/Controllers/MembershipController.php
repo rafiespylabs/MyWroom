@@ -153,7 +153,6 @@ class MembershipController extends Controller
             'join_date' => 'required|date', 
             
         ]);
-
         $memberships = Tbl_membership::find($validatedData['id']);
         $memberships->first_name = $validatedData['first_name'];  
             $memberships->middle_name = $validatedData['middle_name'];  

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Jan 24, 2025 at 10:58 AM
+-- Generation Time: Mar 19, 2025 at 08:56 AM
 -- Server version: 8.3.0
 -- PHP Version: 8.2.18
 
@@ -34,20 +34,6 @@ CREATE TABLE IF NOT EXISTS `cache` (
   `expiration` int NOT NULL,
   PRIMARY KEY (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `cache`
---
-
-INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
-('adadmin@gmail.com|127.0.0.1', 'i:2;', 1728232137),
-('adadmin@gmail.com|127.0.0.1:timer', 'i:1728232137;', 1728232137),
-('admin@admin.com|127.0.0.1', 'i:1;', 1724736137),
-('admin@admin.com|127.0.0.1:timer', 'i:1724736137;', 1724736137),
-('biju@pfrcindia.com|106.222.236.222', 'i:1;', 1731564011),
-('biju@pfrcindia.com|106.222.236.222:timer', 'i:1731564011;', 1731564011),
-('maijo@gmail.com|127.0.0.1', 'i:1;', 1729244591),
-('maijo@gmail.com|127.0.0.1:timer', 'i:1729244591;', 1729244591);
 
 -- --------------------------------------------------------
 
@@ -219,7 +205,7 @@ CREATE TABLE IF NOT EXISTS `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('UEaMhEsLSmJfAnNjq4a0US4FaCOPUSem4UMhAIGd', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiRGVYNmZOUTlBUk95MDlOZU5UV3RHeUdqaW9nZkREOEM5ekYxNmhycSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzM6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9tZW1iZXJzaGlwcyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjE7fQ==', 1737711336);
+('A91YwbHf6qnn0IHJM25VcE7mKZK32wy7xFILWvJu', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiTkc2ZDhqMDlCRUVBb084OWhIWWtwQlZsMHllSmIxZk1IblpyYzZRNSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mjc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC90YXNrcyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjE7fQ==', 1742374077);
 
 -- --------------------------------------------------------
 
@@ -230,22 +216,28 @@ INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, 
 DROP TABLE IF EXISTS `tbl_attendances`;
 CREATE TABLE IF NOT EXISTS `tbl_attendances` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `staff_user_id` int NOT NULL,
-  `longitude_punchin` varchar(255) DEFAULT NULL,
-  `lattitude_punchin` varchar(255) DEFAULT NULL,
-  `punch_in_time` time NOT NULL,
-  `punchinimage` varchar(255) DEFAULT NULL,
-  `punch_out_time` time DEFAULT NULL,
-  `punchoutimage` varchar(255) DEFAULT NULL,
+  `login_id` int NOT NULL,
+  `punchin_long` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `punchin_lat` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `punch_in` varchar(255) NOT NULL,
+  `punchin_image` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `punch_out` varchar(255) DEFAULT NULL,
+  `punch_out_image` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
   `punchout_lat` varchar(255) DEFAULT NULL,
   `punchout_long` varchar(255) DEFAULT NULL,
   `date` date DEFAULT NULL,
   `added_by` int DEFAULT NULL,
   `createdAt` datetime DEFAULT NULL,
   `updatedAt` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_attendance_user` (`staff_user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tbl_attendances`
+--
+
+INSERT INTO `tbl_attendances` (`id`, `login_id`, `punchin_long`, `punchin_lat`, `punch_in`, `punchin_image`, `punch_out`, `punch_out_image`, `punchout_lat`, `punchout_long`, `date`, `added_by`, `createdAt`, `updatedAt`) VALUES
+(1, 1, '3.8988093', '0.38733', '16:51:00', 'qq.jpg', '12:51:00', 'qq.jpg', '3.8988093', '0.38733', '2025-02-20', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -377,6 +369,35 @@ INSERT INTO `tbl_countries` (`id`, `country_name`, `created_at`, `updated_at`) V
 (13, 'Uk', NULL, NULL),
 (14, 'UGANDA', NULL, NULL),
 (15, 'Khathar', '2025-01-21 08:08:22', '2025-01-21 08:08:22');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_daily_works`
+--
+
+DROP TABLE IF EXISTS `tbl_daily_works`;
+CREATE TABLE IF NOT EXISTS `tbl_daily_works` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` enum('start','ongoing','completed','pending') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
+  `remark` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `created_by` int NOT NULL,
+  `created_date` datetime NOT NULL,
+  `edited_by` int DEFAULT NULL,
+  `edited_date` datetime DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `tbl_daily_works`
+--
+
+INSERT INTO `tbl_daily_works` (`id`, `title`, `description`, `status`, `remark`, `created_by`, `created_date`, `edited_by`, `edited_date`, `created_at`, `updated_at`) VALUES
+(1, 'Dail 1', 'sssdd', 'ongoing', 'sdddd', 1, '2025-03-17 06:43:35', 1, '2025-03-17 06:43:41', '2025-03-17 01:13:35', '2025-03-17 01:13:41');
 
 -- --------------------------------------------------------
 
@@ -1285,14 +1306,15 @@ CREATE TABLE IF NOT EXISTS `tbl_memberships` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `tbl_memberships`
 --
 
 INSERT INTO `tbl_memberships` (`id`, `first_name`, `middle_name`, `last_name`, `email`, `phone_number`, `address`, `business_category_id`, `firm_name`, `city_id`, `chapter_id`, `membership_type_id`, `join_date`, `added_by`, `added_date`, `created_at`, `updated_at`) VALUES
-(1, 'new', 'sdd', 'entry', 'newentry@gmail.com', '9867239849', 'new entry', 1, 'aa', 1, 1, 1, '2025-01-13', 1, '2025-01-22', '2025-01-22 09:38:02', '2025-01-24 04:05:36');
+(1, 'new', 'sdd', 'entry', 'newentry@gmail.com', '9867239849', 'new entry', 1, 'aa', 1, 1, 1, '2025-01-13', 1, '2025-01-22', '2025-01-22 09:38:02', '2025-01-24 04:05:36'),
+(2, 'new1', 'Abdul', 'entry', 'newentry0983@gmail.com', '986678888', 'new entry', 1, 'aa', 1, 1, 1, '2025-03-25', 1, '2025-03-11', '2025-03-11 12:51:40', '2025-03-11 12:51:40');
 
 -- --------------------------------------------------------
 
@@ -1315,6 +1337,178 @@ CREATE TABLE IF NOT EXISTS `tbl_membership_types` (
 
 INSERT INTO `tbl_membership_types` (`id`, `membership_type`, `created_at`, `updated_at`) VALUES
 (1, 'Premium', '2025-01-22 09:36:54', '2025-01-22 09:36:54');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_mw_mytasks`
+--
+
+DROP TABLE IF EXISTS `tbl_mw_mytasks`;
+CREATE TABLE IF NOT EXISTS `tbl_mw_mytasks` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `task_id` int NOT NULL,
+  `task_status_id` int NOT NULL,
+  `task_status_date` datetime NOT NULL,
+  `worktime_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `addedby` int NOT NULL,
+  `added_date` datetime NOT NULL,
+  `editedby` int DEFAULT NULL,
+  `edited_date` datetime DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `tbl_mw_mytasks`
+--
+
+INSERT INTO `tbl_mw_mytasks` (`id`, `task_id`, `task_status_id`, `task_status_date`, `worktime_id`, `user_id`, `addedby`, `added_date`, `editedby`, `edited_date`, `created_at`, `updated_at`) VALUES
+(16, 2, 2, '2025-02-26 11:30:45', 12, 1, 22, '2025-03-10 17:00:02', 2, '2025-03-16 17:29:08', '2025-03-10 11:30:02', '2025-03-16 11:59:08'),
+(17, 4, 4, '2025-02-26 11:31:16', 12, 1, 22, '2025-03-10 17:03:24', 2, '2025-03-16 17:29:18', '2025-03-10 11:33:24', '2025-03-16 11:59:18');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_mw_mytask_trans`
+--
+
+DROP TABLE IF EXISTS `tbl_mw_mytask_trans`;
+CREATE TABLE IF NOT EXISTS `tbl_mw_mytask_trans` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `mytask_id` int NOT NULL,
+  `worktime_id` int NOT NULL,
+  `task_date` datetime NOT NULL,
+  `chapter_id` int NOT NULL,
+  `remarks` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `sub_task_status_id` int DEFAULT NULL,
+  `addedby` int NOT NULL,
+  `added_date` datetime NOT NULL,
+  `editedby` int DEFAULT NULL,
+  `edited_date` datetime DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `tbl_mw_mytask_trans`
+--
+
+INSERT INTO `tbl_mw_mytask_trans` (`id`, `mytask_id`, `worktime_id`, `task_date`, `chapter_id`, `remarks`, `sub_task_status_id`, `addedby`, `added_date`, `editedby`, `edited_date`, `created_at`, `updated_at`) VALUES
+(1, 14, 12, '2025-02-26 02:57:29', 5, 'mnmn', NULL, 18, '2025-02-28 09:17:52', NULL, NULL, '2025-02-28 03:47:52', '2025-02-28 03:47:52'),
+(2, 15, 12, '2025-02-27 14:23:36', 7, 'dtghf', NULL, 18, '2025-02-28 09:24:27', NULL, NULL, '2025-02-28 03:54:27', '2025-02-28 03:54:27'),
+(4, 17, 1, '2025-02-27 15:03:11', 6, 'bj', NULL, 23, '2025-03-11 05:12:34', NULL, NULL, '2025-03-10 23:42:34', '2025-03-10 23:42:34'),
+(5, 16, 1, '2025-02-27 14:23:36', 2, 'b', NULL, 1, '2025-03-11 17:32:15', NULL, NULL, '2025-03-11 12:02:15', '2025-03-11 12:02:15'),
+(6, 17, 1, '2025-03-11 00:00:00', 2, 'sds', NULL, 1, '2025-03-11 18:25:08', NULL, NULL, '2025-03-11 12:55:08', '2025-03-11 12:55:08'),
+(7, 17, 12, '2025-03-11 00:00:00', 3, 'xfdf', NULL, 1, '2025-03-11 18:30:10', NULL, NULL, '2025-03-11 13:00:10', '2025-03-11 13:00:10'),
+(8, 17, 13, '2025-03-11 00:00:00', 1, 'ad', NULL, 1, '2025-03-11 18:31:00', NULL, NULL, '2025-03-11 13:01:00', '2025-03-11 13:01:00'),
+(9, 17, 12, '2025-03-11 00:00:00', 2, 'iughu', NULL, 1, '2025-03-11 18:34:02', NULL, NULL, '2025-03-11 13:04:02', '2025-03-11 13:04:02'),
+(10, 17, 13, '2025-03-11 00:00:00', 2, 'jbkj', NULL, 1, '2025-03-11 18:34:21', NULL, NULL, '2025-03-11 13:04:21', '2025-03-11 13:04:21'),
+(11, 17, 12, '2025-03-11 00:00:00', 1, 'jh', 3, 1, '2025-03-11 18:37:13', NULL, NULL, '2025-03-11 13:07:13', '2025-03-11 13:07:13'),
+(12, 16, 12, '2025-03-12 00:00:00', 1, 'gvyh', 2, 1, '2025-03-12 05:16:20', NULL, NULL, '2025-03-11 23:46:20', '2025-03-11 23:46:20'),
+(13, 16, 12, '2025-03-12 00:00:00', 3, 'sdx', 2, 1, '2025-03-12 05:17:28', NULL, NULL, '2025-03-11 23:47:28', '2025-03-11 23:47:28'),
+(14, 16, 12, '2025-03-12 00:00:00', 2, 'gvbg', 3, 1, '2025-03-12 05:17:56', NULL, NULL, '2025-03-11 23:47:56', '2025-03-11 23:47:56'),
+(15, 16, 12, '2025-03-12 00:00:00', 4, 'jj', 4, 1, '2025-03-12 05:20:01', NULL, NULL, '2025-03-11 23:50:01', '2025-03-11 23:50:01'),
+(16, 16, 12, '2025-03-12 00:00:00', 2, 'sss', 2, 1, '2025-03-12 05:23:01', NULL, NULL, '2025-03-11 23:53:01', '2025-03-11 23:53:01'),
+(17, 16, 12, '2025-03-12 00:00:00', 3, 'hgh', 2, 1, '2025-03-12 05:24:41', NULL, NULL, '2025-03-11 23:54:41', '2025-03-11 23:54:41'),
+(18, 16, 12, '2025-03-12 00:00:00', 2, 'ssdd', 3, 1, '2025-03-12 05:25:32', NULL, NULL, '2025-03-11 23:55:32', '2025-03-11 23:55:32');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_mw_statuses`
+--
+
+DROP TABLE IF EXISTS `tbl_mw_statuses`;
+CREATE TABLE IF NOT EXISTS `tbl_mw_statuses` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `addedby` int NOT NULL,
+  `added_date` datetime NOT NULL,
+  `editedby` int DEFAULT NULL,
+  `edited_date` datetime DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `tbl_mw_statuses`
+--
+
+INSERT INTO `tbl_mw_statuses` (`id`, `status`, `addedby`, `added_date`, `editedby`, `edited_date`, `created_at`, `updated_at`) VALUES
+(1, 'Start', 12, '2025-02-26 11:30:22', 1, '2025-03-11 05:01:50', '2025-02-26 06:00:22', '2025-03-10 23:31:50'),
+(2, 'Pending', 12, '2025-02-26 11:30:45', 1, '2025-03-11 05:22:14', '2025-02-26 06:00:45', '2025-03-10 23:52:14'),
+(3, 'Completed', 12, '2025-02-26 11:31:03', NULL, NULL, '2025-02-26 06:01:03', '2025-02-26 06:01:03'),
+(4, 'No Need', 12, '2025-02-26 11:31:16', NULL, NULL, '2025-02-26 06:01:16', '2025-02-26 06:01:16'),
+(6, 'Postponded', 1, '2025-03-11 05:22:27', NULL, NULL, '2025-03-10 23:52:27', '2025-03-10 23:52:27');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_mw_tasks`
+--
+
+DROP TABLE IF EXISTS `tbl_mw_tasks`;
+CREATE TABLE IF NOT EXISTS `tbl_mw_tasks` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `task` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `dep_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `worktime_id` int NOT NULL,
+  `addedby` int NOT NULL,
+  `added_date` datetime NOT NULL,
+  `editedby` int DEFAULT NULL,
+  `edited_date` datetime DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `tbl_mw_tasks`
+--
+
+INSERT INTO `tbl_mw_tasks` (`id`, `task`, `dep_id`, `user_id`, `worktime_id`, `addedby`, `added_date`, `editedby`, `edited_date`, `created_at`, `updated_at`) VALUES
+(1, 'task 11jdjdkd', 1, 1, 12, 1, '2025-03-17 06:44:47', NULL, NULL, '2025-03-17 01:14:47', '2025-03-17 01:14:47'),
+(2, 'task2', 1, 1, 1, 1, '2025-03-17 07:01:34', NULL, NULL, '2025-03-17 01:31:34', '2025-03-17 01:31:34'),
+(3, 'task2', 1, 1, 1, 1, '2025-03-17 07:02:00', NULL, NULL, '2025-03-17 01:32:00', '2025-03-17 01:32:00'),
+(4, 'ssss', 1, 2, 1, 1, '2025-03-17 07:29:15', 1, '2025-03-17 07:33:50', '2025-03-17 01:59:15', '2025-03-17 02:03:50'),
+(5, 'asfsf', 1, 2, 12, 1, '2025-03-17 07:38:24', 1, '2025-03-17 07:38:30', '2025-03-17 02:08:24', '2025-03-17 02:08:30'),
+(6, 'Watch unified timetable Calendar and intimate to all the concerned (item no. 7 CG’s HT offline meetings)\r\n- Daily', 1, 2, 12, 1, '2025-03-19 08:47:56', NULL, NULL, '2025-03-19 03:17:56', '2025-03-19 03:17:56');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_mw_worktimes`
+--
+
+DROP TABLE IF EXISTS `tbl_mw_worktimes`;
+CREATE TABLE IF NOT EXISTS `tbl_mw_worktimes` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `worktime` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `addedby` int NOT NULL,
+  `added_date` datetime NOT NULL,
+  `editedby` int DEFAULT NULL,
+  `edited_date` datetime DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `tbl_mw_worktimes`
+--
+
+INSERT INTO `tbl_mw_worktimes` (`id`, `worktime`, `addedby`, `added_date`, `editedby`, `edited_date`, `created_at`, `updated_at`) VALUES
+(1, '12', 8, '2025-02-25 10:31:12', 8, '2025-02-25 10:47:23', '2025-02-25 05:01:12', '2025-02-25 05:17:23'),
+(12, '17th', 11, '2025-02-26 02:55:06', NULL, NULL, '2025-02-25 21:25:06', '2025-02-25 21:25:06'),
+(13, '13', 1, '2025-03-11 05:16:19', 1, '2025-03-11 05:16:24', '2025-03-10 23:46:19', '2025-03-10 23:46:24'),
+(14, '14', 2, '2025-03-16 17:24:09', 2, '2025-03-16 17:24:16', '2025-03-16 11:54:09', '2025-03-16 11:54:16'),
+(15, '13tyuu', 1, '2025-03-17 07:39:03', 1, '2025-03-17 07:39:08', '2025-03-17 02:09:03', '2025-03-17 02:09:08');
 
 -- --------------------------------------------------------
 
@@ -1369,7 +1563,14 @@ CREATE TABLE IF NOT EXISTS `tbl_staffs` (
   KEY `fk_staff_country` (`country_id`),
   KEY `fk_staff_designation` (`design_id`),
   KEY `fk_staff_department` (`dept_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `tbl_staffs`
+--
+
+INSERT INTO `tbl_staffs` (`id`, `user_id`, `Join_date`, `birth_date`, `country_id`, `address`, `branch_id`, `dept_id`, `design_id`, `mobile_number`, `created_date`, `added_by`, `profile_image`, `createdAt`, `updatedAt`) VALUES
+(1, 2, '2025-01-30', NULL, NULL, 'new entry\r\nnew entry', 1, 1, 1, 9867239849, '2025-01-30', 1, 'nil', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1445,30 +1646,26 @@ CREATE TABLE IF NOT EXISTS `users` (
   `email` varchar(255) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
   `role_id` int NOT NULL,
+  `chapter_id` int DEFAULT NULL,
   `createdAt` datetime DEFAULT NULL,
   `updatedAt` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `user_name` (`user_name`),
   KEY `fk_user_role` (`role_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `user_name`, `email`, `password`, `role_id`, `createdAt`, `updatedAt`) VALUES
-(1, 'Admin', 'admin', 'admin@gmail.com', '$2y$12$IkvcQhmClT605VGYas9RReHj214O0g7cXU3DIrlFukjjJGZxzFqfu', 1, '2024-07-17 23:51:55', '2024-07-17 23:51:55');
+INSERT INTO `users` (`id`, `name`, `user_name`, `email`, `password`, `role_id`, `chapter_id`, `createdAt`, `updatedAt`) VALUES
+(1, 'Admin', 'admin', 'admin@gmail.com', '$2y$12$IkvcQhmClT605VGYas9RReHj214O0g7cXU3DIrlFukjjJGZxzFqfu', 1, NULL, '2024-07-17 23:51:55', '2024-07-17 23:51:55'),
+(2, 'test', 'test user', 'testuser@gmail.com', '$2y$12$WWAzO6gYSd1DnHdlYxbKVOjX3PUSHJfOMdzKNMophwt4nVN8yT./2', 3, NULL, NULL, NULL);
 
 --
 -- Constraints for dumped tables
 --
-
---
--- Constraints for table `tbl_attendances`
---
-ALTER TABLE `tbl_attendances`
-  ADD CONSTRAINT `fk_attendance_user` FOREIGN KEY (`staff_user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `tbl_districts`
