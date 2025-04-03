@@ -23,6 +23,7 @@ use App\Http\Controllers\WorktimeController;
 use App\Http\Controllers\MytaskController;
 use App\Http\Controllers\MytasktransController;
 use App\Http\Controllers\DailyworkController;
+use App\Http\Controllers\TaskdayController;
 use Illuminate\Support\Facades\Route;
 Route::get('/', function () {return redirect(route('login'));});
 Route::get('/dashboard', [AdminController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
@@ -161,5 +162,14 @@ Route::middleware('auth')->group(function () {
     Route::post('/dailyworks/edit', [DailyworkController::class, 'edit'])->name('dailyworks.edit');
     Route::post('/dailyworks/update', [DailyworkController::class, 'update'])->name('dailyworks.update');
     Route::post('/dailyworks/destroy', [DailyworkController::class, 'destroy'])->name('dailyworks.destroy');
+
+    Route::get('/taskdays/{id?}', [TaskdayController::class, 'index'])->name('taskdays');
+    Route::post('/taskdays/list', [TaskdayController::class, 'list'])->name('taskdays.list');
+    Route::post('/taskdays/store', [TaskdayController::class, 'store'])->name('taskdays.store');
+    Route::get('/taskdays/{id}/edit', [TaskdayController::class, 'edit'])->name('taskdays.edit');
+    Route::post('/taskdays/update/{id}', [TaskdayController::class, 'update'])->name('taskdays.update');
+    Route::delete('/taskdays/{id}', [TaskdayController::class, 'destroy'])->name('taskdays.destroy');
+    Route::get('/tasks/getlist', [TaskController::class, 'getlist'])->name('tasks.getlist');
+    Route::get('/worktimes/getlist', [WorktimeController::class, 'getlist'])->name('worktimes.getlist');
 });
 require __DIR__.'/auth.php';

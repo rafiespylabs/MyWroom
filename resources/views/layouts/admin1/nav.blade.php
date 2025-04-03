@@ -66,6 +66,12 @@ $role_id=auth()->user()->role_id;
                         <p>Tasks</p>
                     </a>
                 </li>
+                <li class="nav-item {{request()->is('taskdays')? 'active':''}}">
+                    <a href="{{route('taskdays')}}">
+                        <i class="menu-icon fa fa-tasks"></i>
+                        <p>Task Days</p>
+                    </a>
+                </li>
                 <li class="nav-item {{request()->is('dailyworks')? 'active':''}}">
                     <a href="{{route('dailyworks')}}">
                         <i class="menu-icon fa fa-tasks"></i>

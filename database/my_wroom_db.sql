@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Mar 19, 2025 at 08:56 AM
+-- Generation Time: Apr 03, 2025 at 12:21 PM
 -- Server version: 8.3.0
 -- PHP Version: 8.2.18
 
@@ -205,7 +205,7 @@ CREATE TABLE IF NOT EXISTS `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('A91YwbHf6qnn0IHJM25VcE7mKZK32wy7xFILWvJu', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiTkc2ZDhqMDlCRUVBb084OWhIWWtwQlZsMHllSmIxZk1IblpyYzZRNSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mjc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC90YXNrcyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjE7fQ==', 1742374077);
+('H739r38IUH3WHP6kwuBBBkvQDy0w8psT1jBj1J9C', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiN1JtS3lDM2RMZlZ4V24wemdmSVk3U0hxcnVhTWd1ODFHWDRteTZ3byI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC90YXNrZGF5cyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjE7fQ==', 1743682843);
 
 -- --------------------------------------------------------
 
@@ -1479,6 +1479,26 @@ INSERT INTO `tbl_mw_tasks` (`id`, `task`, `dep_id`, `user_id`, `worktime_id`, `a
 (4, 'ssss', 1, 2, 1, 1, '2025-03-17 07:29:15', 1, '2025-03-17 07:33:50', '2025-03-17 01:59:15', '2025-03-17 02:03:50'),
 (5, 'asfsf', 1, 2, 12, 1, '2025-03-17 07:38:24', 1, '2025-03-17 07:38:30', '2025-03-17 02:08:24', '2025-03-17 02:08:30'),
 (6, 'Watch unified timetable Calendar and intimate to all the concerned (item no. 7 CG’s HT offline meetings)\r\n- Daily', 1, 2, 12, 1, '2025-03-19 08:47:56', NULL, NULL, '2025-03-19 03:17:56', '2025-03-19 03:17:56');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_mw_task_days`
+--
+
+DROP TABLE IF EXISTS `tbl_mw_task_days`;
+CREATE TABLE IF NOT EXISTS `tbl_mw_task_days` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `task_id` int NOT NULL,
+  `worktime_id` int NOT NULL,
+  `added_by` int NOT NULL,
+  `added_date` datetime NOT NULL,
+  `edited_by` int DEFAULT NULL,
+  `edited_date` datetime DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 

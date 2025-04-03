@@ -25,6 +25,7 @@
                                         <th>Department</th>                                    
                                         <th>Staff</th>                                    
                                         <th>Work Time</th> 
+                                        <th>Task Days</th>
                                         <th>Added By</th>                                    
                                         <th>Added Date</th>                                    
                                         <th>Edited By</th>                                    
@@ -45,6 +46,7 @@
                                             <td>{{ $task->department->department ?? 'N/A'}}</td>                                          
                                             <td>{{ $task->staff->name ?? 'N/A'}}</td>                                          
                                             <td>{{ $task->worktime->worktime ?? 'N/A'}}</td> 
+                                            <td><a href="{{route('taskdays',$task->id)}}">Task Days</a></td> 
                                             <td>{{ $addedby}}</td>
                                             <td>{{ $added_date}}</td>                                           
                                             <td>{{ $editedby ?? ' '}}</td> 
@@ -211,13 +213,14 @@
 
                                 var formattedAddedDate = response.data.added_date ? new Date(response.data.added_date).toLocaleString() : ' ';
                                 var formattedEditedDate = response.data.edited_date ? new Date(response.data.edited_date).toLocaleString() : ' ';
-
+                                var taskdays='<a href="/taskdays/'.response.data.id.'"></a>';
                                 var newRow = table.row.add([
                                     lastRowNumber,
                                     response.data.task,
                                     response.data.department,
                                     response.data.staff_name,
                                     response.data.worktime,
+                                    taskdays,
                                     response.data.added_user,
                                     formattedAddedDate,
                                     response.data.editedby,
@@ -317,13 +320,14 @@
 
                                 var formattedAddedDate = response.data.added_date ? new Date(response.data.added_date).toLocaleString() : ' ';
                                 var formattedEditedDate = response.data.edited_date ? new Date(response.data.edited_date).toLocaleString() : ' ';
-
+                                var taskdays='<a href="/taskdays/'.response.data.id.'"></a>';
                                 row.data([
                                     rowId, 
                                     response.data.task,
                                     response.data.department,
                                     response.data.staff_name,
                                     response.data.worktime,
+                                    taskdays,
                                     response.data.added_user,
                                     formattedAddedDate,
                                     response.data.editedby,
