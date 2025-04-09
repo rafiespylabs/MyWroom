@@ -74,6 +74,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/districts/destroy', [DistrictController::class, 'destroy'])->name('districts.destroy'); 
 
     Route::get('/staffs', [StaffController::class, 'index'])->name('staffs');
+    Route::get('/staffs/tasks/{id}', [StaffController::class, 'getCurrentDayTask'])->name('staffs.getCurrentDayTask');
     Route::get('/staff/list', [StaffController::class, 'list'])->name('staff.list');
     Route::post('/staff/store', [StaffController::class, 'store'])->name('staff.store');
     Route::post('/staff/show', [StaffController::class, 'show'])->name('staff.show');
