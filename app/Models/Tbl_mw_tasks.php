@@ -28,9 +28,4 @@ class Tbl_mw_tasks extends Model
     {
         return $this->belongsTo(User::class, 'user_id','id');
     }
-
-    public function worktime()
-    {
-        return $this->belongsTo(Tbl_mw_worktimes::class, 'worktime_id','id');
-    }
 }

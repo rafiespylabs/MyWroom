@@ -23,16 +23,18 @@ class MytasktransController extends Controller
         ->where('mytask_id',$mytask_id)
         ->get();
         $task = Tbl_mw_tasks::all();
-        $mytask = Tbl_mw_mytasks::all();
+        $mytasks = Tbl_mw_mytasks::all();
         $status = Tbl_mw_statuses::all();
         $worktime = Tbl_mw_worktimes::all();
         $chapter = Tbl_chapter::all();
         $user = Tbl_staffs::all();
         $statuses = Tbl_mw_statuses::all();
+        $mytask=Tbl_mw_mytasks::find($mytask_id);
         return view('admin.mytasktrans', [
             'mytasktrans' => $mytasktrans,
+            'mytask'=>$mytask,
             'task' => $task,
-            'mytask' => $mytask,
+            'mytasks' => $mytasks,
             'status' => $status,
             'worktime' => $worktime,
             'chapter' => $chapter,
@@ -109,59 +111,43 @@ class MytasktransController extends Controller
         $request->validate([
             'id' => 'required|exists:tbl_mw_mytask_trans,id',
         ]);
-        $mytasktrans = Tbl_mw_mytask_trans::with('task','mytask','worktime','chapter','user')->find($request->id);
+        $mytasktrans = Tbl_mw_mytask_trans::with('task','mytask','worktime','chapter','user','status')->find($request->id);
         if (!$mytasktrans) {
             return response()->json(['success' => false, 'message' => 'Task not found'], 404);
         }
         return response()->json([
             'success' => true,
-            'data' => [
-               'task' => $mytasktrans->mytask->task->task,
-                    'task_date' => $mytasktrans->mytask->added_date,
-                    'worktime' => $mytasktrans->worktime->worktime,
-                    'chapter' => $mytasktrans->chapter->chapter,
-                    'remarks' => $mytasktrans->remarks,
-                    'status' => $mytasktrans->mytask->status->status,
-                    'user_id' => $mytasktrans->user->user_id,    
-            ]
+            'data' => $mytasktrans
         ]);
     }
     public function update(Request $request)
     {
         $validatedData = $request->validate([
             'id' => 'required|exists:tbl_mw_mytask_trans,id',
-            'task_id' => 'integer|exists:tbl_mw_tasks,id',
-            'mytask_id' => 'required|integer|exists:tbl_mw_mytasks,id',
+            'task_date' => 'required|date',
             'worktime_id' => 'required|integer|exists:tbl_mw_worktimes,id',
-            'task_date' => 'required',
             'chapter_id' => 'required|integer|exists:tbl_chapters,id',
-            'remarks' => 'required|string|max:100', 
-            'sub_task_status_id' => 'required|integer|exists:tbl_mw_statuses,id',
-            'user_id' => 'required|integer|exists:tbl_staffs,id',   
+            'remarks' => 'nullable|string|max:100', 
+            'sub_task_status_id' => 'nullable|integer|exists:tbl_mw_statuses,id',
             
         ]);
         $mytasktrans = Tbl_mw_mytask_trans::find($validatedData['id']);
-        $mytasktrans->task_id = $validatedData['task_id'];  
-        $mytasktrans->mytask_id = $validatedData['mytask_id'];  
         $mytasktrans->worktime_id = $validatedData['worktime_id'];  
         $mytasktrans->task_date = $validatedData['task_date'];  
         $mytasktrans->chapter_id = $validatedData['chapter_id'];  
         $mytasktrans->remarks = $validatedData['remarks'];  
         $mytasktrans->sub_task_status_id = $validatedData['sub_task_status_id'];   
-        $mytasktrans->user_id = $validatedData['user_id'];
         $mytasktrans->editedby = Auth::user()->id;
         $mytasktrans->edited_date = Carbon::now();             
         $mytasktrans->save();
-        $task = Tbl_mw_tasks::find($validatedData['task_id']);
-        if ($task) {
-            $mytasktrans->task = $task->task;
-            $mytasktrans->task_date = $task->added_date; 
-        } else {
-            return response()->json(['success' => false, 'message' => 'Invalid task ID.']);
-        }
-
-        $mytask = Tbl_mw_mytasks::find($validatedData['mytask_id']);
-        $mytasktrans->sub_task_status_id = $mytask->sub_task_status_id;
+        // $task = Tbl_mw_tasks::find($validatedData['task_id']);
+        // if ($task) {
+        //     $mytasktrans->task = $task->task;
+        //     $mytasktrans->task_date = $task->added_date; 
+        // } else {
+        //     return response()->json(['success' => false, 'message' => 'Invalid task ID.']);
+        // }
+        $mytask = Tbl_mw_mytasks::find($validatedData['id']);
 
         $worktime = Tbl_mw_worktimes::find($validatedData['worktime_id']);
         $mytasktrans->worktime = $worktime->worktime;
@@ -171,21 +157,16 @@ class MytasktransController extends Controller
 
         $status = Tbl_mw_statuses::find($validatedData['sub_task_status_id']);
         $mytasktrans->status = $status->status;
-
-        $user = Tbl_staffs::find($validatedData['user_id']);
-        $mytasktrans->staff = $user->user_id;
         return response()->json([
             'success' => true,
             'message' => 'Task updated successfully',
             'data' => [
-                'id' => $mytasktrans->id,
-                    'task' => $task ? $task->task : null,
-                    'task_date' => $task ? $task->added_date : null,
+                    'id' => $mytasktrans->id,
+                    'task_date' => $mytasktrans->task_date,
                     'worktime' => $worktime ? $worktime->worktime : null,
-                    'chapter' => $chapter ? $chapter->chapter : null,
-                    'remarks' => $mytasktrans->remarks,
+                    'chapter' => $chapter ? $chapter->chapter_name : null,
+                    'remarks' => $mytasktrans->remarks ?? 'N/A',
                     'status' => $status ? $status->status : null,
-                    'user_id' => $user ? $user->user_id : null,                    
                     'addedby' => optional($mytasktrans->addedByUser)->name, 
                     'added_date' => $mytasktrans->added_date,
                     'editedby' => optional($mytasktrans->editedByUser)->name, 

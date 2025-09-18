@@ -43,7 +43,8 @@ class MembershipController extends Controller
             'city_id' => 'required|integer|exists:tbl_cities,id',
             'chapter_id' => 'required|integer|exists:tbl_chapters,id',
             'membership_type_id' => 'required|integer|exists:tbl_membership_types,id',
-            'join_date' => 'required|date',        
+            'join_date' => 'required|date', 
+            'gst_in' => 'nullable|string|max:255',        
         ]);
 
         try {
@@ -71,6 +72,7 @@ class MembershipController extends Controller
             $memberships->chapter_id = $validatedData['chapter_id'];  
             $memberships->membership_type_id = $validatedData['membership_type_id'];  
             $memberships->join_date = $validatedData['join_date'];  
+            $memberships->gst_in = $validatedData['gst_in']; 
             $memberships->added_by = $added_by;    
             $memberships->added_date = $added_date;         
             $memberships->save();
@@ -108,14 +110,10 @@ class MembershipController extends Controller
         $request->validate([
             'id' => 'required|exists:tbl_memberships,id',
         ]);
-
-
         $memberships = Tbl_membership::with('business_category','city','chapter','membership_type')->find($request->id);
-    
         if (!$memberships) {
             return response()->json(['success' => false, 'message' => 'Membership not found'], 404);
         }
-    
         return response()->json([
             'success' => true,
             'data' => [
@@ -131,6 +129,7 @@ class MembershipController extends Controller
                 'chapter_id' => $memberships->chapter_id, 
                 'membership_type_id' => $memberships->membership_type_id, 
                 'join_date' => $memberships->join_date, 
+                'gst_in' => $memberships->gst_in, 
             ]
         ]);
     }
@@ -151,10 +150,11 @@ class MembershipController extends Controller
             'chapter_id' => 'required|integer|exists:tbl_chapters,id',
             'membership_type_id' => 'required|integer|exists:tbl_membership_types,id',
             'join_date' => 'required|date', 
+            'gst_in' => 'nullable|string|max:255',
             
         ]);
-        $memberships = Tbl_membership::find($validatedData['id']);
-        $memberships->first_name = $validatedData['first_name'];  
+            $memberships = Tbl_membership::find($validatedData['id']);
+            $memberships->first_name = $validatedData['first_name'];  
             $memberships->middle_name = $validatedData['middle_name'];  
             $memberships->last_name = $validatedData['last_name'];  
             $memberships->email = $validatedData['email'];  
@@ -166,6 +166,7 @@ class MembershipController extends Controller
             $memberships->chapter_id = $validatedData['chapter_id'];  
             $memberships->membership_type_id = $validatedData['membership_type_id'];  
             $memberships->join_date = $validatedData['join_date'];  
+            $memberships->gst_in = $validatedData['gst_in']; 
             $memberships->save();    
 
             $business_category = Tbl_business_category::find($validatedData['business_category_id']);

@@ -9,6 +9,10 @@ use App\Models\Tbl_branches;
 use App\Models\Tbl_departments;
 use App\Models\Tbl_designations;
 use App\Models\Tbl_roles;
+use App\Models\Tbl_mw_worktimes;
+use App\Models\Tbl_mw_task_days;
+use App\Models\Tbl_mw_tasks;
+use App\Models\Tbl_mw_mytasks;
 use Response;
 use Redirect;
 use Hash;
@@ -122,5 +126,49 @@ class StaffController extends Controller
       $user->password=Hash::make($request->password);
       $user->save();
       return Response::json([ 'success' => true]);
+   }
+
+   public function getCurrentDayTask($id){
+      $today = Carbon::now();
+      $dayName = strtolower($today->format('l')); 
+      $dayNumber = $today->day; 
+      $userId = Auth::id();
+      $keywords = [$dayName, (string)$dayNumber, 'Daily'];
+      $worktimeIds = Tbl_mw_worktimes::where(function ($query) use ($keywords) {
+         foreach ($keywords as $keyword) {
+               $query->orWhere('worktime', 'LIKE', '%' . $keyword . '%');
+         }
+      })->pluck('id');
+      $taskDays = Tbl_mw_task_days::whereIn('worktime_id', $worktimeIds)->get();
+      $taskIds = $taskDays->pluck('task_id');
+      $tasks = Tbl_mw_tasks::
+         whereIn('id', $taskIds)
+         ->where('user_id',$userId)
+         ->get();
+         $now = Carbon::now();
+         foreach ($tasks as $task) {
+             $matchingTaskDay = $taskDays->firstWhere('task_id', $task->id);
+             $alreadyExists = Tbl_mw_mytasks::where('task_id', $task->id)
+                 ->where('user_id', $userId)
+                 ->whereDate('task_status_date', $now->toDateString())
+                 ->exists();
+     
+             if (!$alreadyExists && $matchingTaskDay) {
+                 Tbl_mw_mytasks::create([
+                     'task_id' => $task->id,
+                     'task_status_id' => 2, 
+                     'task_status_date' => $now,
+                     'worktime_id' => $matchingTaskDay->worktime_id,
+                     'user_id' => $userId,
+                     'addedby' => $userId,
+                     'added_date' => $now,
+                 ]);
+             }
+         }
+         return response()->json([
+              'success'=>true,
+             'message' => 'Today Tasks Fectched Successfully',
+             'task_count' => $tasks->count(),
+         ]);
    }
 }

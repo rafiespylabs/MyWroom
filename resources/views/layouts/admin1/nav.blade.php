@@ -36,6 +36,7 @@ $role_id=auth()->user()->role_id;
                     </span>
                     <h4 class="text-section">APPLICATION</h4>
                 </li>
+                @if($role_id==1 || $role_id==2)
                 <li class="nav-item {{request()->is('staffs')? 'active':''}}">
                     <a href="{{route('staffs')}}">
                         <i class="menu-icon fa  fa-users"></i>
@@ -48,6 +49,7 @@ $role_id=auth()->user()->role_id;
                         <p>Attendances</p>
                     </a>
                 </li>
+                @endif
                 <li class="nav-item {{request()->is('memberships')? 'active':''}}">
                     <a href="{{route('memberships')}}">
                         <i class="menu-icon fa fa-users"></i>
@@ -78,13 +80,21 @@ $role_id=auth()->user()->role_id;
                         <p>Daily Works</p>
                     </a>
                 </li>
-                @if(auth()->user()->role_id==3)
+                <li class="nav-item {{request()->is('invoices')? 'active':''}}">
+                    <a href="{{route('invoices')}}">
+                        <i class="menu-icon fas fa-file-invoice"></i>
+                        <p>Invoices</p>
+                    </a>
+                </li>
+                @if($role_id==3||$role_id==2)
                 <li class="nav-item {{request()->is('mytasks')? 'active':''}}">
                     <a href="{{route('mytasks')}}">
                         <i class="menu-icon fa fa-tasks"></i>
                         <p>My Tasks</p>
                     </a>
                 </li>
+                @endif
+                @if($role_id==3)
                 <li class="nav-item {{request()->is('getChapter')? 'active':''}}">
                     <a href="{{route('getChapter')}}">
                         <i class="menu-icon fa fa-tasks"></i>

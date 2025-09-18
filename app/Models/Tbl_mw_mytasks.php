@@ -9,6 +9,16 @@ class Tbl_mw_mytasks extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'task_id',
+        'task_status_id',
+        'task_status_date',
+        'worktime_id',
+        'user_id',
+        'addedby',
+        'added_date',
+    ];
+
     public function addedByUser()
     {
         return $this->belongsTo(User::class, 'addedby', 'id');
@@ -36,7 +46,7 @@ class Tbl_mw_mytasks extends Model
 
     public function user()
     {
-        return $this->belongsTo(Tbl_staffs::class, 'user_id','id');
+        return $this->belongsTo(User::class, 'user_id','id');
     }
 
 }

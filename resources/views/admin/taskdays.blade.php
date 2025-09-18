@@ -9,9 +9,9 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="d-flex align-items-center">
-                            <h4 class="card-title">Task Day</h4>
-                            <button class="btn btn-primary btn-round ms-auto" data-bs-toggle="modal" data-bs-target="#CreateModal">
-                                <i class="fa fa-plus"></i> Create
+                            <h4 class="card-title">Task Days</h4>
+                            <button class="btn btn-primary sbtn-round ms-auto" data-bs-toggle="modal" data-bs-target="#CreateModal">
+                                <i class="fa fa-plus"></i> Add Task Day
                             </button>
                         </div>
                     </div>
@@ -49,7 +49,7 @@
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Create</h5>
+                    <h5 class="modal-title">Add</h5>
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -347,45 +347,6 @@
         });
     });
 
-
-    $.ajax({
-        url: "{{ route('tasks.getlist') }}",
-        type: "GET",
-        success: function(response) {
-            if (response.length > 0) {
-                $('#add_task_id').html('<option value="">Select Task</option>');
-                $.each(response, function(index, task) {
-                    $('#add_task_id').append('<option value="'+task.id+'">'+task.task+'</option>');
-                });
-            } else {
-                $('#add_task_id').html('<option value="">No Task Found</option>');
-            }
-        },
-        error: function(xhr, status, error) {
-            console.error("Error fetching task:", error);
-        }
-    });
-
-
-    $.ajax({
-        url: "{{ route('worktimes.getlist') }}",
-        type: "GET",
-        success: function(response) {
-            if (response.length > 0) {
-                $('#add_worktime_id').html('<option value="">Select Worktime</option>');
-                $.each(response, function(index, worktime) {
-                    $('#add_worktime_id').append('<option value="'+worktime.id+'">'+worktime.worktime+'</option>');
-                });
-            } else {
-                $('#add_worktime_id').html('<option value="">No Worktime Found</option>');
-            }
-        },
-        error: function(xhr, status, error) {
-            console.error("Error fetching worktime:", error);
-        }
-    });
-
-    
     function deletetaskdays(taskdaysId) {
         swal({
             title: "Are you sure?",

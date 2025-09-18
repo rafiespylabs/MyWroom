@@ -32,7 +32,8 @@
                                         <th>City</th>                                    
                                         <th>Chapter</th>                                    
                                         <th>Membership Type</th>                                    
-                                        <th>Join Date</th>                                    
+                                        <th>Join Date</th>   
+                                        <th>GSTIN</th>                                 
                                         <th>Added By</th>                                    
                                         <th>Added Date</th>                                    
                                         <th>Action</th>
@@ -56,12 +57,11 @@
                                             <td>{{ $member->city->city_name ?? 'N/A'}}</td>
                                             <td>{{ $member->chapter->chapter_name ?? 'N/A'}}</td>
                                             <td>{{ $member->membership_type->membership_type ?? 'N/A'}}</td>
-                                            <td>{{ $member->join_date}}</td>                                            
+                                            <td>{{ $member->join_date}}</td>   
+                                            <td>{{ $member->gst_in}}</td>                                          
                                             <td>{{ $added_by}}</td>                                            
-                                            <td>{{ \Carbon\Carbon::parse($member->added_date)->format('d/m/Y') }}</td>                                    
-                                           
+                                            <td>{{ \Carbon\Carbon::parse($member->added_date)->format('d/m/Y') }}</td> 
                                             <td>
-                                           
                                                 <i class="fa fa-edit edit_memberships"
                                                     data-id="{{ $member->id }}" data-rowid="{{ $i }}" data-bs-toggle="modal"
                                                     data-bs-target="#EditModal"></i>
@@ -70,9 +70,7 @@
                                                     data-id="{{ $member->id }}"></i>    
                                             </td>                                           
                                         </tr>                                      
-                                        
                                         @php $i++; @endphp                                      
-                                       
                                     @endforeach
                                 </tbody>
                             </table>
@@ -171,6 +169,12 @@
                                 <input type="date" name="join_date" id="join_date" class="form-control" required>
                             </div>
                         </div> 
+                        <div class="row form-group">
+                            <div class="col-4">
+                                <label for="join_date">GSTIN</label>
+                                <input type="text" name="gst_in" id="gst_in" class="form-control">
+                            </div>
+                        </div>  
                         <div class="form-actions form-group">
                             <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                             <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
@@ -270,7 +274,13 @@
                                 <label for="join_date">Join Date</label>
                                 <input type="date" name="join_date" id="edit_join_date" class="form-control" required>
                             </div>     
-                        </div>                      
+                        </div>   
+                        <div class="row form-group">
+                            <div class="col-4">
+                                <label for="join_date">GSTIN</label>
+                                <input type="text" name="gst_in" id="edit_gst_in" class="form-control">
+                            </div>
+                        </div>                     
                         <div class="form-actions form-group">
                             <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                             <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
@@ -323,6 +333,7 @@
                                     response.data.chapter_name,
                                     response.data.membership_type,
                                     response.data.join_date,
+                                    response.data.gst_in,
                                     response.data.added_user,
                                     response.data.added_date,
                                     '<i class="fa fa-edit edit_memberships" data-rowid="'+ lastRowNumber +'" data-id="' + response.data.id + '" data-bs-toggle="modal" data-bs-target="#EditModal"></i>'+
@@ -390,7 +401,8 @@
                                 $('#edit_city_id').val(response.data.city_id);                                              
                                 $('#edit_chapter_id').val(response.data.chapter_id);                                              
                                 $('#edit_membership_type_id').val(response.data.membership_type_id);                                              
-                                $('#edit_join_date').val(response.data.join_date);                                                                                           
+                                $('#edit_join_date').val(response.data.join_date); 
+                                $('#edit_gst_in').val(response.data.gst_in);                                                                                           
                             } else {
                                 alert('Error fetching data: ' + response.message);
                             }
@@ -441,6 +453,7 @@
                                     response.data.chapter_name,
                                     response.data.membership_type,
                                     response.data.join_date,
+                                    response.data.gst_in,
                                     response.data.added_user,
                                     response.data.added_date,
                                     '<i class="fa fa-edit edit_memberships" data-rowid="' + rowId + '" data-id="' + response.data.id + '" data-bs-toggle="modal" data-bs-target="#EditModal"></i>' +

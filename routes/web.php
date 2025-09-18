@@ -24,6 +24,8 @@ use App\Http\Controllers\MytaskController;
 use App\Http\Controllers\MytasktransController;
 use App\Http\Controllers\DailyworkController;
 use App\Http\Controllers\TaskdayController;
+use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\InvoiceTransController;
 use Illuminate\Support\Facades\Route;
 Route::get('/', function () {return redirect(route('login'));});
 Route::get('/dashboard', [AdminController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
@@ -74,6 +76,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/districts/destroy', [DistrictController::class, 'destroy'])->name('districts.destroy'); 
 
     Route::get('/staffs', [StaffController::class, 'index'])->name('staffs');
+    Route::get('/staffs/tasks/{id}', [StaffController::class, 'getCurrentDayTask'])->name('staffs.getCurrentDayTask');
     Route::get('/staff/list', [StaffController::class, 'list'])->name('staff.list');
     Route::post('/staff/store', [StaffController::class, 'store'])->name('staff.store');
     Route::post('/staff/show', [StaffController::class, 'show'])->name('staff.show');
@@ -148,6 +151,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/mytasks/edit', [MytaskController::class, 'edit'])->name('mytasks.edit');
     Route::post('/mytasks/update', [MytaskController::class, 'update'])->name('mytasks.update');
     Route::post('/mytasks/destroy', [MytaskController::class, 'destroy'])->name('mytasks.destroy');
+    Route::post('/mytasks/statusUpdate', [MytaskController::class, 'statusUpdate'])->name('mytasks.status.update');
     Route::post('/get-task-date', [MytaskController::class, 'getStatusDate'])->name('get.task.date');
 
     Route::get('/mytasktrans/{mytask_id}', [MytasktransController::class, 'index'])->name('mytasktrans');
@@ -171,5 +175,18 @@ Route::middleware('auth')->group(function () {
     Route::delete('/taskdays/{id}', [TaskdayController::class, 'destroy'])->name('taskdays.destroy');
     Route::get('/tasks/getlist', [TaskController::class, 'getlist'])->name('tasks.getlist');
     Route::get('/worktimes/getlist', [WorktimeController::class, 'getlist'])->name('worktimes.getlist');
+
+    Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoices');
+    Route::any('/invoice/list', [InvoiceController::class, 'list'])->name('invoice.list');
+    Route::get('/invoice/create', [InvoiceController::class, 'create'])->name('invoice.create');
+    Route::post('/invoice/store', [InvoiceController::class, 'store'])->name('invoice.store');
+    Route::post('/invoice/getMembers', [InvoiceController::class, 'getMembers'])->name('invoice.getMembers');
+    Route::get('/invoice/generate/{id}', [InvoiceController::class, 'invoice'])->name('invoice.generate');
+
+    Route::get('/invoiceitem/addItems/{id}', [InvoiceTransController::class, 'addItems'])->name('invoiceitem.addItems');
+    Route::any('/invoiceitem/list', [InvoiceTransController::class, 'list'])->name('invoiceitem.list');
+    Route::post('/invoiceitem/calculateTotals', [InvoiceTransController::class, 'calculateTotals'])->name('invoiceitem.calculateTotals');
+    Route::post('/invoiceitem/getHsn', [InvoiceTransController::class, 'getHsn'])->name('invoiceitem.getHsn');
+    Route::post('/invoiceitem/store', [InvoiceTransController::class, 'store'])->name('invoiceitem.store');
 });
 require __DIR__.'/auth.php';

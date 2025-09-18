@@ -8,14 +8,13 @@
                         <div class="d-flex align-items-center">
                             <button class="btn btn-primary btn-round ms-auto" data-bs-toggle="modal"
                                 data-bs-target="#CreateModal">
-                                <i class="fa fa-plus"></i> Create
+                                <i class="fa fa-plus"></i> Add
                             </button>
+                            <a href="javascript:history.back()" class="btn btn-info btn-round ms-auto">Go Back</a>
                         </div>
                     </div>
                     <div class="card-body">
-                        <div id="preloader" style="display:none;">
-                            <img src="{{ asset('web/preloader.gif') }}">
-                        </div>
+                        <h4>Task : {{$mytask->task->task ?? ''}}</h4>
                         <div class="table-responsive">
                             <table id="mytasktrans-datatable" class="table table-striped table-bordered">
                                 <thead>
@@ -42,11 +41,11 @@
                                     @php $edited_date = $mytasktran->edited_date ? \Carbon\Carbon::parse($mytasktran->edited_date)->timezone('Asia/Kolkata')->format('d/m/Y h:i A') : ''; @endphp                                   
                                         <tr id="row{{ $mytasktran->id }}">
                                             <td>{{ $i }}</td>  
-                                            <td>{{ $mytasktran->mytask->task->added_date ?? 'N/A'}}</td>
+                                            <td>{{ $mytasktran->task_date	 ?? 'N/A'}}</td>
                                             <td>{{ $mytasktran->worktime->worktime ?? 'N/A'}}</td> 
                                             <td>{{ $mytasktran->chapter->chapter_name ?? 'N/A'}}</td> 
                                             <td>{{ $mytasktran->remarks ?? 'N/A'}}</td> 
-                                            <td>{{ $mytasktran->mytask->status->status ?? 'N/A'}}</td>
+                                            <td>{{ $mytasktran->status->status ?? 'N/A'}}</td>
                                             <td>{{ $addedby}}</td>
                                             <td>{{ $added_date}}</td>                                           
                                             <td>{{ $editedby ?? ' '}}</td> 
@@ -75,7 +74,7 @@
         <div class="modal-dialog modal-lg" role="document">            
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Create My Task Trans</h5>
+                    <h5 class="modal-title">Add </h5>
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -87,14 +86,14 @@
                             <input type="hidden" name="mytask_id" value="{{$mytask_id}}">
                             <div class="col-6">
                                 <label for="task_date">Task Date</label>                           
-                                <input type="date" id="task_date" name="task_date" class="form-control" value="{{date('Y-m-d')}}">
+                                <input type="datetime-local" id="task_date" name="task_date" class="form-control" value="{{$mytask->added_date ?? ''}}" readonly>
                             </div> 
                             <div class="col-6">
                                 <label for="worktime">Work Time</label>
                                 <select name="worktime_id" id="worktime_id" class="form-control" required>
                                     <option value="">Select One</option>
                                     @foreach ($worktime as $work)
-                                        <option value="{{ $work->id }}">{{ $work->worktime }}</option>
+                                        <option value="{{ $work->id }}" @if($mytask->worktime_id==$work->id) selected @else disabled @endif>{{ $work->worktime }}</option>
                                     @endforeach
                                 </select>
                             </div> 
@@ -139,7 +138,7 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Edit My Task Trans</h5>
+                    <h5 class="modal-title">Edit</h5>
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -147,53 +146,49 @@
                 <div class="modal-body">
                     <form id="edit_mytasktrans_form" class="form">
                         @csrf                       
-
                         <input type="hidden" name="rowid" id="row_id">
-                            <input type="hidden" name="id" id="mytasktrans_id">
-                            <div class="form-group">
-                            <label for="task">Task</label>
-                            <select name="mytask_id" id="edit_mytask_id" class="form-control" required>
-                                @foreach ($mytask as $tas)
-                                    <option value="{{ $tas->id }}">{{ $tas->task->task }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="task_date">Task Date</label>                           
-                            <input type="text" id="edit_task_date" name="task_date" class="form-control" readonly>
+                        <input type="hidden" name="id" id="mytasktrans_id">
+                        <div class="row form-group">
+                            <div class="col-6">
+                                <label for="task_date">Task Date</label>                           
+                                <input type="datetime-local" id="edit_task_date" name="task_date" class="form-control" value="{{date('Y-m-d')}}">
+                            </div> 
+                            <div class="col-6">
+                                <label for="worktime">Work Time</label>
+                                <select name="worktime_id" id="edit_worktime_id" class="form-control" required>
+                                    <option value="">Select One</option>
+                                    @foreach ($worktime as $work)
+                                        <option value="{{ $work->id }}">{{ $work->worktime }}</option>
+                                    @endforeach
+                                </select>
+                            </div> 
                         </div> 
-                        <div class="form-group">
-                            <label for="worktime">Work Time</label>
-                            <select name="worktime_id" id="edit_worktime_id" class="form-control" required>
-                                @foreach ($worktime as $work)
-                                    <option value="{{ $work->id }}">{{ $work->worktime }}</option>
-                                @endforeach
-                            </select>
+                        <div class="row form-group">
+                            <div class="col-6">
+                                <label for="chapter">Chapter</label>
+                                <select name="chapter_id" id="edit_chapter_id"  class="form-control" required>
+                                    <option value="">Select One</option>
+                                    @foreach ($chapter as $chapt)
+                                        <option value="{{ $chapt->id }}">{{ $chapt->chapter_name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <label for="remarks">Remarks</label>
+                                <textarea name="remarks" id="edit_remarks" class="form-control"></textarea>
+                            </div> 
                         </div>  
-                        <div class="form-group">
-                            <label for="chapter">Chapter</label>
-                            <select name="chapter_id" id="edit_chapter_id" class="form-control" required>
-                                @foreach ($chapter as $chapt)
-                                    <option value="{{ $chapt->id }}">{{ $chapt->chapter }}</option>
-                                @endforeach
-                            </select>
-                        </div>  
-                        <div class="form-group">
-                            <label for="remarks">Remark</label>
-                            <input type="text" name="remarks" id="edit_remarks" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="sub_task_status_id">Task Status</label>                           
-                            <input type="text" id="edit_sub_task_status_id" name="sub_task_status_id" class="form-control" readonly>
-                        </div> 
-                        <div class="form-group">
-                            <label for="user">User</label>
-                            <select name="user_id" id="edit_user_id" class="form-control" required>
-                                @foreach ($user as $use)
-                                    <option value="{{ $use->id }}">{{ $use->user_id }}</option>
-                                @endforeach
-                            </select>
-                        </div>                             
+                        <div class="row form-group">
+                            <div class="col-6">
+                                <label for="sub_task_status_id">Task Status</label>     
+                                <select name="sub_task_status_id" id="edit_sub_task_status_id" class="form-control" required>
+                                    <option value="">Select One</option>
+                                    @foreach($statuses as $status)
+                                    <option value="{{$status->id}}">{{$status->status}}</option>
+                                    @endforeach
+                                </select>                      
+                            </div> 
+                        </div>                         
                         <div class="form-actions form-group">
                             <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                             <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
@@ -205,6 +200,7 @@
     </div>    
 
     @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.30.1/moment.min.js"></script>
         <script>
             $(document).ready(function() {
                 $('#mytasktrans-datatable').DataTable();
@@ -280,22 +276,8 @@
                 $(document).on("click", ".edit_mytasktrans", function() {
                     var mytasktrans_id = $(this).data('id');
                     var row_id = $(this).data('rowid');
-                    var task_id = $(this).data('task_id');
-                    var sub_task_status_id = $(this).data('sub_task_status_id');
-                    var mytask_id = $(this).data('mytask_id');
-                    var worktime_id = $(this).data('worktime_id');
-                    var chapter_id = $(this).data('chapter_id');
-                    var user_id = $(this).data('user_id');
-
                     $('#mytasktrans_id').val(mytasktrans_id);
                     $('#row_id').val(row_id);
-                    $('#task_id').val(task_id);
-                    $('#sub_task_status_id').val(sub_task_status_id);
-                    $('#mytask_id').val(mytask_id);
-                    $('#chapter_id').val(chapter_id);
-                    $('#user_id').val(user_id);
-                    $('#worktime_id').val(worktime_id);
-
                     $.ajax({
                         type: "POST",
                         url: "{{ route('mytasktrans.edit') }}",
@@ -308,11 +290,14 @@
                                 
                                 $('#edit_mytask_id').val(response.data.mytask_id);
                                 $('#edit_task_date').val(response.data.task_date);
-                                $('#edit_worktime_id').val(response.data.worktime_id);
+                                $('#edit_task_date').prop('readonly',true);
+                                $('#edit_worktime_id').empty();
+                                $('#edit_worktime_id').append('<option value="' + response.data.worktime_id+ '" selected >' +  response.data.worktime.worktime + '</option>');
                                 $('#edit_chapter_id').val(response.data.chapter_id);                                              
                                 $('#edit_remarks').val(response.data.remarks);                                                                                          
-                                $('#edit_sub_task_status_id').val(response.data.status);                                                                                          
+                                $('#edit_sub_task_status_id').val(response.data.sub_task_status_id);                                                                                          
                             } else {
+                                $('#edit_task_date').prop('readonly',false);
                                 alert('Error fetching data: ' + response.message);
                             }
                         },
@@ -354,13 +339,11 @@
 
                                 row.data([
                                     rowId, 
-                                    response.data.mytask.task,
-                                    response.data.mytask.added_date,
+                                    response.data.task_date,
                                     response.data.worktime,
                                     response.data.chapter,
                                     response.data.remarks,
-                                    response.data.status.status,
-                                    response.data.user_id,                                    
+                                    response.data.status,
                                     response.data.addedby,                                   
                                     formattedAddedDate,
                                     response.data.editedby,

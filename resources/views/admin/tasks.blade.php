@@ -24,7 +24,6 @@
                                         <th>Task</th>                                    
                                         <th>Department</th>                                    
                                         <th>Staff</th>                                    
-                                        <th>Work Time</th> 
                                         <th>Task Days</th>
                                         <th>Added By</th>                                    
                                         <th>Added Date</th>                                    
@@ -45,7 +44,6 @@
                                             <td>{{ $task->task }}</td>                               
                                             <td>{{ $task->department->department ?? 'N/A'}}</td>                                          
                                             <td>{{ $task->staff->name ?? 'N/A'}}</td>                                          
-                                            <td>{{ $task->worktime->worktime ?? 'N/A'}}</td> 
                                             <td><a href="{{route('taskdays',$task->id)}}">Task Days</a></td> 
                                             <td>{{ $addedby}}</td>
                                             <td>{{ $added_date}}</td>                                           
@@ -105,16 +103,6 @@
                                 @endforeach
                             </select>
                         </div>  
-                        <div class="form-group">
-                            <label for="worktime">Work Time</label>
-                            <select name="worktime_id" id="worktime_id" class="form-control" required>
-                                <option value="">Select One </option>
-                                @foreach ($worktime as $work)
-                                    <option value="{{ $work->id }}">{{ $work->worktime }}</option>
-                                @endforeach
-                            </select>
-                        </div> 
-                        
                         <div class="form-actions form-group">
                             <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                             <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
@@ -162,16 +150,7 @@
                                     <option value="{{ $use->user->id }}">{{ $use->user->name }}</option>
                                 @endforeach
                             </select>
-                        </div>  
-                        <div class="form-group">
-                            <label for="worktime">Work Time</label>
-                            <select name="worktime_id" id="edit_worktime_id" class="form-control" required>
-                                <option value="">Select One </option>
-                                @foreach ($worktime as $work)
-                                    <option value="{{ $work->id }}">{{ $work->worktime }}</option>
-                                @endforeach
-                            </select>
-                        </div>                              
+                        </div>                           
                         <div class="form-actions form-group">
                             <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                             <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
@@ -213,13 +192,12 @@
 
                                 var formattedAddedDate = response.data.added_date ? new Date(response.data.added_date).toLocaleString() : ' ';
                                 var formattedEditedDate = response.data.edited_date ? new Date(response.data.edited_date).toLocaleString() : ' ';
-                                var taskdays='<a href="/taskdays/'.response.data.id.'"></a>';
+                                var taskdays='<a href="/taskdays/'+response.data.id+'">Task Days</a>';
                                 var newRow = table.row.add([
                                     lastRowNumber,
                                     response.data.task,
                                     response.data.department,
                                     response.data.staff_name,
-                                    response.data.worktime,
                                     taskdays,
                                     response.data.added_user,
                                     formattedAddedDate,
@@ -260,13 +238,11 @@
                     var row_id = $(this).data('rowid');
                     var dep_id = $(this).data('dep_id');
                     var user_id = $(this).data('user_id');
-                    var worktime_id = $(this).data('worktime_id');
 
                     $('#tasks_id').val(tasks_id);
                     $('#row_id').val(row_id);
                     $('#dep_id').val(dep_id);
                     $('#user_id').val(user_id);
-                    $('#worktime_id').val(worktime_id);
 
                     $.ajax({
                         type: "POST",
@@ -279,7 +255,6 @@
                             if (response.success) {
                                 $('#edit_dep_id').val(response.data.dep_id);
                                 $('#edit_user_id').val(response.data.user_id);                                              
-                                $('#edit_worktime_id').val(response.data.worktime_id);                                              
                                 $('#edit_task').val(response.data.task);                                              
                             } else {
                                 alert('Error fetching data: ' + response.message);
@@ -320,13 +295,12 @@
 
                                 var formattedAddedDate = response.data.added_date ? new Date(response.data.added_date).toLocaleString() : ' ';
                                 var formattedEditedDate = response.data.edited_date ? new Date(response.data.edited_date).toLocaleString() : ' ';
-                                var taskdays='<a href="/taskdays/'.response.data.id.'"></a>';
+                                var taskdays='<a href="/taskdays/'+response.data.id+'">Task Days</a>';
                                 row.data([
                                     rowId, 
                                     response.data.task,
                                     response.data.department,
                                     response.data.staff_name,
-                                    response.data.worktime,
                                     taskdays,
                                     response.data.added_user,
                                     formattedAddedDate,

@@ -13,13 +13,17 @@ use Carbon\Carbon;
 
 class MytaskController extends Controller
 {
-    public function index(){
-
-        $mytasks = Tbl_mw_mytasks::with(['addedByUser','editedByUser','task','status','worktime','user'])->get();
+    public function index()
+    {
+        $user_id=Auth::user()->id;
+        $mytasks = Tbl_mw_mytasks::with(['addedByUser','editedByUser','task','status','worktime','user'])
+        ->where('user_id',$user_id)
+        ->whereDate('added_date',Carbon::now())
+        ->get();
         $task = Tbl_mw_tasks::all();
         $status = Tbl_mw_statuses::all();       
         $worktime = Tbl_mw_worktimes::all();
-        $user = Tbl_staffs::all();
+        $user = Tbl_staffs::with('user')->get();
         return view('admin.mytasks', [
             'mytasks' => $mytasks,
             'task' => $task,
@@ -98,25 +102,15 @@ class MytaskController extends Controller
     public function edit(Request $request)
     {
         $request->validate([
-            'id' => 'required|exists:tbl_mw_mytasks,id',
+            'mytasks_id' => 'required|exists:tbl_mw_mytasks,id',
         ]);
-
-
-        $mytasks = Tbl_mw_mytasks::with('task','status','worktime','user')->find($request->id);
-    
-        if (!$mytasks) {
+        $mytask = Tbl_mw_mytasks::with('task','status','worktime','user')->find($request->mytasks_id);
+        if (!$mytask) {
             return response()->json(['success' => false, 'message' => 'My Task not found'], 404);
         }
-    
         return response()->json([
             'success' => true,
-            'data' => [
-                'task_id' => $mytasks->task_id ,
-                'task_status_id' => $mytasks->task_status_id, 
-                'task_status_date' => Carbon::parse($mytasks->task_status_date)->format('d/m/Y h:i A'),
-                'worktime_id' => $mytasks->worktime_id, 
-                'user_id' => $mytasks->user_id, 
-            ]
+            'data' => $mytask
         ]);
     }
 
@@ -128,16 +122,13 @@ class MytaskController extends Controller
             'task_status_id' => 'required|integer|exists:tbl_mw_statuses,id',
             'task_status_date' => 'required',
             'worktime_id' => 'required|integer|exists:tbl_mw_worktimes,id',
-            'user_id' => 'required|integer|exists:tbl_staffs,id',
+            'user_id' => 'required|integer|exists:users,id',
             
         ]);
-
         $status = Tbl_mw_statuses::find($validatedData['task_status_id']);
-
         $mytasks = Tbl_mw_mytasks::find($validatedData['id']);
         $mytasks->task_id = $validatedData['task_id'];
         $mytasks->task_status_id = $validatedData['task_status_id'];
-        
         $mytasks->task_status_date = $status && $status->added_date
             ? Carbon::parse($status->added_date)->format('Y-m-d H:i:s')
             : Carbon::now()->format('Y-m-d H:i:s');
@@ -146,34 +137,31 @@ class MytaskController extends Controller
         $mytasks->editedby = Auth::user()->id;
         $mytasks->edited_date = Carbon::now();             
         $mytasks->save();
-
         $task = Tbl_mw_tasks::find($validatedData['task_id']);
-            $mytasks->task = $task->task;
-
-            $status = Tbl_mw_statuses::find($validatedData['task_status_id']);
-            if ($status) {
-                $mytasks->task_status = $status->status;
-                $mytasks->task_status_date = $status->added_date; 
-            } else {
-                return response()->json(['success' => false, 'message' => 'Invalid task status ID.']);
-            }
-
-            $worktime = Tbl_mw_worktimes::find($validatedData['worktime_id']);
-            $mytasks->worktime = $worktime->worktime;
-
-            $user = Tbl_staffs::find($validatedData['user_id']);
-            $mytasks->user_id = $user->user_id;
-       
+        $mytasks->task = $task->task;
+        $status = Tbl_mw_statuses::find($validatedData['task_status_id']);
+        if ($status) 
+        {
+            $mytasks->task_status = $status->status;
+            $mytasks->task_status_date = $status->added_date; 
+        } 
+        else 
+        {
+            return response()->json(['success' => false, 'message' => 'Invalid task status ID.']);
+        }
+        $worktime = Tbl_mw_worktimes::find($validatedData['worktime_id']);
+        $mytasks->worktime = $worktime->worktime;
+        $user = User::find($validatedData['user_id']);       
         return response()->json([
             'success' => true,
             'message' => 'Task updated successfully',
             'data' => [
                 'id' => $mytasks->id,
-                    'task' => $task ? $task->task : null,
-                    'task_status' => $status ? $status->status : null,
-                    'task_status_date' => $status ? $status->added_date : null,
-                    'worktime' => $worktime ? $worktime->worktime : null,
-                    'user_id' => $user ? $user->user_id : null,  
+                'task' => $task ? $task->task : null,
+                'task_status' => $status ? $status->status : null,
+                'task_status_date' => $status ? $status->added_date : null,
+                'worktime' => $worktime ? $worktime->worktime : null,
+                'user' => $user ? $user->name : null,  
                 'addedby' => optional($mytasks->addedByUser)->name, 
                 'added_date' => $mytasks->added_date,
                 'editedby' => optional($mytasks->editedByUser)->name, 
@@ -221,5 +209,23 @@ class MytaskController extends Controller
             'message' => 'My Task deleted successfully',
         ]);
     } 
+    public function statusUpdate(Request $request)
+    {
+        $validatedData = $request->validate([
+            'id' => 'required|exists:tbl_mw_mytasks,id',
+            'task_status_id' => 'required|integer|exists:tbl_mw_statuses,id',
+            'comment' => 'nullable|string',
+        ]);
+        $mytask = Tbl_mw_mytasks::find($validatedData['id']);
+        $mytask->task_status_id =$validatedData['task_status_id'];
+        $mytask->task_status_date = Carbon::now()->format('Y-m-d H:i:s');
+        $mytask->comment =$validatedData['comment'];
+        $mytask->save();
+        return response()->json([
+            'success' => true,
+             'data'=>$mytask,
+            'message' => 'Task Status Changed Successfully',
+        ]);
+    }
     
 }

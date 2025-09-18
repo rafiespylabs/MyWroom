@@ -23,16 +23,26 @@ class TaskdayController extends Controller
     {
         $limit = $request->input('length', 10);
         $start = $request->input('start', 0);
+        $search = $request->input('search.value', null); 
         $task_id = $request->input('task_id', 0);
-        $query = Tbl_mw_task_days::with(['addedByUser', 'editedByUser', 'task', 'worktime']);
-         if($task_id)
-         {
-            $query->where('task_id',$task_id);
-         }
+        $query = Tbl_mw_task_days::query();
+        if ($search) {
+                $query->whereHas('task', function ($q) use ($search) {
+                      $q->where('task', 'like', "%$search%");
+                  })
+                  ->orWhereHas('worktime', function ($q) use ($search) {
+                      $q->where('worktime', 'like', "%$search%");
+                  });
+        }
+        if($task_id)
+        {
+        $query->where('task_id',$task_id);
+        }
         $totalFiltered = $query->count(); 
 
         $taskdays = $query->skip($start)
             ->take($limit)
+            ->with(['addedByUser', 'editedByUser', 'task', 'worktime'])
             ->latest('id')
             ->get();
 

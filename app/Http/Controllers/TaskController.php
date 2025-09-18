@@ -15,15 +15,13 @@ class TaskController extends Controller
 {
     public function index()
     {
-        $tasks=Tbl_mw_tasks::with(['addedByUser','editedByUser','department','staff','worktime'])->get();
+        $tasks=Tbl_mw_tasks::with(['addedByUser','editedByUser','department','staff'])->get();
         $department = Tbl_departments::all();
         $user = Tbl_staffs::with('user')->get();
-        $worktime = Tbl_mw_worktimes::all();
         return view('admin.tasks', [
             'tasks' => $tasks,
             'department' => $department,
             'user' => $user,
-            'worktime' => $worktime,
         ]);
     }
 
@@ -32,7 +30,6 @@ class TaskController extends Controller
         $validatedData = $request->validate([
             'dep_id' => 'required|integer|exists:tbl_departments,id',
             'user_id' => 'required|integer|exists:tbl_staffs,user_id',
-            'worktime_id' => 'required|integer|exists:tbl_mw_worktimes,id',
             'task' => 'required|max:1000',           
         ]);
 
@@ -40,7 +37,6 @@ class TaskController extends Controller
             $tasks = new Tbl_mw_tasks();
             $tasks->dep_id = $validatedData['dep_id'];  
             $tasks->user_id = $validatedData['user_id'];  
-            $tasks->worktime_id = $validatedData['worktime_id'];  
             $tasks->task = $validatedData['task'];   
             $tasks->addedby = Auth::user()->id;           
             $tasks->added_date = Carbon::now();          
@@ -51,9 +47,6 @@ class TaskController extends Controller
 
             $user = User::find($validatedData['user_id']);
             $tasks->staff_name = $user->name;
-
-            $worktime = Tbl_mw_worktimes::find($validatedData['worktime_id']);
-            $tasks->worktime = $worktime->worktime;
 
             $tasks->added_user = Auth::user()->name;
             $tasks->editedby ='';
@@ -75,21 +68,16 @@ class TaskController extends Controller
         $request->validate([
             'id' => 'required|exists:tbl_mw_tasks,id',
         ]);
-
-
-        $tasks = Tbl_mw_tasks::with('department','staff','worktime')->find($request->id);
-    
+        $tasks = Tbl_mw_tasks::with('department','staff')->find($request->id);
         if (!$tasks) {
             return response()->json(['success' => false, 'message' => 'Task not found'], 404);
         }
-    
         return response()->json([
             'success' => true,
             'data' => [
                 'task' => $tasks->task ,
                 'dep_id' => $tasks->dep_id, 
                 'user_id' => $tasks->staff->id, 
-                'worktime_id' => $tasks->worktime_id, 
             ]
         ]);
     }
@@ -100,7 +88,6 @@ class TaskController extends Controller
             'id' => 'required|exists:tbl_mw_tasks,id',
             'dep_id' => 'required|integer|exists:tbl_departments,id',
             'user_id' => 'required|integer|exists:tbl_staffs,user_id',
-            'worktime_id' => 'required|integer|exists:tbl_mw_worktimes,id',
             'task' => 'required|max:1000',
             
         ]);
@@ -108,7 +95,6 @@ class TaskController extends Controller
         $tasks = Tbl_mw_tasks::find($validatedData['id']);
         $tasks->dep_id = $validatedData['dep_id'];
         $tasks->user_id = $validatedData['user_id'];
-        $tasks->worktime_id = $validatedData['worktime_id'];
         $tasks->task = $validatedData['task']; 
         $tasks->editedby = Auth::user()->id;
         $tasks->edited_date = Carbon::now();             
@@ -119,10 +105,6 @@ class TaskController extends Controller
 
         $user = User::find($validatedData['user_id']);
         $tasks->staff_name = $user->name;
-
-        $worktime = Tbl_mw_worktimes::find($validatedData['worktime_id']);
-        $tasks->worktime = $worktime->worktime;
-
         $tasks->editedby=Auth::user()->name;
 
         $staff_user = User::find($tasks->addedby);
@@ -133,7 +115,6 @@ class TaskController extends Controller
             'data' =>$tasks,
         ]);
     }
-
     public function destroy(Request $request)
     {
         $validatedData = $request->validate([
